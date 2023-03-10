@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stack>
+
 #include "ByteCode.hpp"
 
 class StackMachine
@@ -7,4 +9,5 @@ class StackMachine
 public:
     StackMachine();
     void interprete(ByteCodeProgram* program);
+
 };
