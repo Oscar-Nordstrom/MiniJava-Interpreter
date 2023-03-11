@@ -35,7 +35,7 @@ var11
 parameters
 0
 block_0
-62
+64
 iconst
 4
 iconst
@@ -52,6 +52,14 @@ imul
 *
 istore
 expression4
+iconst
+10
+iload
+expression4
+isub
+-
+istore
+expression3
 iconst
 4
 iconst
@@ -77,19 +85,11 @@ idiv
 istore
 expression5
 iload
-expression4
+expression3
 iload
 expression5
 iadd
 +
-istore
-expression3
-iconst
-10
-iload
-expression3
-isub
--
 istore
 expression2
 iload
@@ -100,6 +100,8 @@ iadd
 +
 istore
 expression0
+iload
+expression0
 print
 
 iconst
@@ -107,7 +109,7 @@ true
 inot
 
 istore
-true
+var11
 iload
 var11
 iconst
@@ -128,7 +130,7 @@ iconst
 10
 iconst
 1
-iconst
+igt
 >
 istore
 expression13
@@ -155,6 +157,8 @@ expression12
 ior
 ||
 istore
+expression8
+iload
 expression8
 print
 

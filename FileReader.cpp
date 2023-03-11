@@ -85,6 +85,26 @@ ByteCodeProgram *FileReader::ReadFile()
     return program;
 }
 
+void FileReader::printProgram(ByteCodeProgram *program)
+{
+    for(auto m: program->methodsVec)
+    {
+        std::cout<<"\n";
+        std::cout<<m.data<<"\n";
+        for(auto v: m.vars)
+        {
+            std::cout<<v->getID()<<std::endl;
+        }
+        for(auto i: m.instructions)
+        {
+            std::cout<<"\t"<<i.name<<std::endl;
+            for(auto a: i.arguments)
+            {
+                std::cout<<"\t\t"<<a.getString()<<std::endl;
+            }
+        }
+    }
+}
 
 std::string FileReader::getTypeString(InstructionType type)
 {
@@ -162,7 +182,7 @@ InstructionType FileReader::getStringType(std::string type)
     {
         ret = InstructionType::iload;
     }
-    else if(type == "")
+    else if(type == "iconst")
     {
         ret = InstructionType::iconst;
     }
