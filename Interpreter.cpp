@@ -30,6 +30,21 @@ ByteCode *Activation::getNext()
     return &this->method->instructions[this->instructionCounter].arguments[this->argumentCounter++];
 }
 
+void Activation::gotoInstruction(std::string name)
+{
+    for(int i = 0; i < this->method->instructions.size(); i++)
+    {
+        std::cout<<"instruction: "<<this->method->instructions[i].name<<std::endl;
+        if(this->method->instructions[i].name == name)
+        {
+            std::cout<<"Found goto instruction: "<<this->method->instructions[i].name<<std::endl;
+            this->instructionCounter = i;
+            this->argumentCounter = 0;
+            break;
+        }
+    }
+}
+
 Interpreter::Interpreter(ByteCodeProgram *program)
 {
     this->program = program;
@@ -59,8 +74,8 @@ void Interpreter::execute()
     ByteCodeMethod* m = this->mainMethod;
     Activation* current_activation = new Activation(0, 0, m);
     ByteCode* curInstruction = new ByteCode();
-    std::stack<Activation> activationStack;
-    int one, tow;
+    std::stack<Activation*> activationStack;
+    int one, two;
     while(curInstruction->type != InstructionType::stop)
     {
         curInstruction = current_activation->getNext();
@@ -114,27 +129,30 @@ void Interpreter::execute()
                 this->dataStack.push(0);
             break;
         case InstructionType::goto_i: 
-
+            std::cout<<"goto: "<<curInstruction->getString()<<std::endl;
+            current_activation->gotoInstruction(curInstruction->what);
             break;
         case InstructionType::iffalse_goto_i: 
-
+            std::cout<<"if: "<<curInstruction->getString()<<std::endl;
+            one = this->dataStack.top();
+            this->dataStack.pop();
+            if(one == 0)
+            {
+                current_activation->gotoInstruction(curInstruction->what);
+            }
             break;
         case InstructionType::invokevirtual_m: 
-
+            activationStack.push(current_activation);
+            current_activation = new Activation(0,0, this->getMethod(curInstruction->what));
             break;
         case InstructionType::ireturn: 
-
+            current_activation = activationStack.top();
+            activationStack.pop();
             break;
         case InstructionType::print: 
             one = this->dataStack.top();
             this->dataStack.pop();
             std::cout<<one<<std::endl;
-            break;
-        case InstructionType::stop: 
-            return;
-            break;
-        case InstructionType::nothing: 
-
             break;
         }
     }
@@ -211,6 +229,20 @@ int Interpreter::getWhat(std::string what)
     else
     {
         ret = std::stoi(what);
+    }
+    return ret;
+}
+
+ByteCodeMethod *Interpreter::getMethod(std::string name)
+{
+    ByteCodeMethod* ret = this->program->methods[name];
+    if(ret == nullptr)
+    {
+        std::cout<<"Could not find method: "<<name<<std::endl;
+    }
+    else
+    {
+        std::cout<<"found method: "<<ret->getData()<<std::endl;
     }
     return ret;
 }

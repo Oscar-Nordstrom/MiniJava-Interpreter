@@ -11,6 +11,7 @@ class Activation
 public:
     Activation(int ic, int ac, ByteCodeMethod* method);
     ByteCode* getNext();
+    void gotoInstruction(std::string name);
 public:
     int instructionCounter;
     int argumentCounter;
@@ -33,4 +34,5 @@ public:
 private:
     void handleArgumentOp(InstructionType instruction);
     int getWhat(std::string what);
+    ByteCodeMethod* getMethod(std::string name);
 };
