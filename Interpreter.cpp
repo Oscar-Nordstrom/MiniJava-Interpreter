@@ -77,6 +77,9 @@ void Interpreter::execute()
         switch (curInstruction->type)
         {
         case InstructionType::iload: 
+            if(curInstruction->what == "this")
+                continue;
+            //std::cout<<"iload: "<<curInstruction->what<<std::endl;
             this->dataStack.push(current_activation->local_vars.at(curInstruction->what));
             //std::cout<<"iload: "<<curInstruction->what<<": "<<this->dataStack.top()<<std::endl;
             break;
@@ -85,6 +88,9 @@ void Interpreter::execute()
             //std::cout<<"iconst: "<<curInstruction->what<<": "<<this->dataStack.top()<<std::endl;
             break;
         case InstructionType::istore: 
+            if(curInstruction->what == "this")
+                continue;
+            //std::cout<<"istore: "<<curInstruction->what<<std::endl;
             one = this->dataStack.top();
             this->dataStack.pop();
             current_activation->local_vars.at(curInstruction->what) = one;

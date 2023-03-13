@@ -4,12 +4,12 @@ FileReader::FileReader()
 {
 }
 
-ByteCodeProgram *FileReader::ReadFile()
+ByteCodeProgram *FileReader::ReadFile(std::string fileName)
 {
-    std::ifstream file("byte_code.txt");
+    std::ifstream file(fileName);
     if(!file.is_open())
     {
-        std::cout<<"Could not open file\n";
+        std::cout<<"Could not open file: "<<fileName<<"\n";
         return nullptr;
     }
 

@@ -9,7 +9,7 @@ class FileReader
 {
 public:
     FileReader();
-    ByteCodeProgram* ReadFile();
+    ByteCodeProgram* ReadFile(std::string fileName = "byte_code.txt");
     void printProgram(ByteCodeProgram* program);
 private:
     std::string getTypeString(InstructionType type);
