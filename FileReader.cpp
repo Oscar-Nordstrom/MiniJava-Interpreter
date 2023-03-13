@@ -66,7 +66,8 @@ ByteCodeProgram *FileReader::ReadFile()
                 file>>argumentType;
                 if(argumentType != getTypeString(InstructionType::print)
                     &&argumentType != getTypeString(InstructionType::inot)
-                    &&argumentType != getTypeString(InstructionType::stop))
+                    &&argumentType != getTypeString(InstructionType::stop)
+                    &&argumentType != getTypeString(InstructionType::ireturn))
                 {
                     file>>argument;
                 }
@@ -89,7 +90,6 @@ void FileReader::printProgram(ByteCodeProgram *program)
 {
     for(auto m: program->methodsVec)
     {
-        std::cout<<"\n";
         std::cout<<m.data<<"\n";
         for(auto v: m.vars)
         {

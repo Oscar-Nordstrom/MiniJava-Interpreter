@@ -11,8 +11,6 @@ Activation::Activation(int ic, int ac, ByteCodeMethod *method)
 
 ByteCode *Activation::getNext()
 {
-
-    //std::cout<<"Get next start\n";
     if(this->instructionCounter >= this->method->instructions.size())
     {
         std::cout<<"Instruction counter too big\n";
@@ -21,11 +19,8 @@ ByteCode *Activation::getNext()
     if(this->argumentCounter >= this->method->instructions[this->instructionCounter].arguments.size())
     {
         instructionCounter++;
-        //return this->getNext();
+        this->argumentCounter = 0;
     }
-    //std::cout<<"Get next end\n";
-    //std::cout<<"InstructionCounter: "<<this->instructionCounter<<"\nArgument counter: "<<this->argumentCounter<<std::endl;
-    //std::cout<<"Returning: "<< this->method->instructions[this->instructionCounter].arguments[this->argumentCounter].getString()<<std::endl;
 
     return &this->method->instructions[this->instructionCounter].arguments[this->argumentCounter++];
 }
@@ -34,10 +29,9 @@ void Activation::gotoInstruction(std::string name)
 {
     for(int i = 0; i < this->method->instructions.size(); i++)
     {
-        std::cout<<"instruction: "<<this->method->instructions[i].name<<std::endl;
         if(this->method->instructions[i].name == name)
         {
-            std::cout<<"Found goto instruction: "<<this->method->instructions[i].name<<std::endl;
+            //std::cout<<"Found goto instruction: "<<this->method->instructions[i].name<<std::endl;
             this->instructionCounter = i;
             this->argumentCounter = 0;
             break;
@@ -79,19 +73,22 @@ void Interpreter::execute()
     while(curInstruction->type != InstructionType::stop)
     {
         curInstruction = current_activation->getNext();
+        //std::cout<<curInstruction->getString()<<std::endl;
         switch (curInstruction->type)
         {
         case InstructionType::iload: 
             this->dataStack.push(current_activation->local_vars.at(curInstruction->what));
-            //std::cout<<"Loaded: "<<argument->what<<": "<<localVars->at(argument->what)<<" : "<<this->dataStack.top()<<std::endl;
+            //std::cout<<"iload: "<<curInstruction->what<<": "<<this->dataStack.top()<<std::endl;
             break;
         case InstructionType::iconst: 
             this->dataStack.push(this->getWhat(curInstruction->what));
+            //std::cout<<"iconst: "<<curInstruction->what<<": "<<this->dataStack.top()<<std::endl;
             break;
         case InstructionType::istore: 
             one = this->dataStack.top();
             this->dataStack.pop();
             current_activation->local_vars.at(curInstruction->what) = one;
+            //std::cout<<"istore: "<<curInstruction->what<<": "<<one<<std::endl;
             break;
         case InstructionType::iadd: 
             this->handleArgumentOp(InstructionType::iadd);
@@ -129,21 +126,22 @@ void Interpreter::execute()
                 this->dataStack.push(0);
             break;
         case InstructionType::goto_i: 
-            std::cout<<"goto: "<<curInstruction->getString()<<std::endl;
+            //std::cout<<"goto: "<<curInstruction->getString()<<std::endl;
             current_activation->gotoInstruction(curInstruction->what);
             break;
         case InstructionType::iffalse_goto_i: 
-            std::cout<<"if: "<<curInstruction->getString()<<std::endl;
+            //std::cout<<"if: "<<curInstruction->getString()<<std::endl;
             one = this->dataStack.top();
             this->dataStack.pop();
             if(one == 0)
-            {
+            {     
                 current_activation->gotoInstruction(curInstruction->what);
             }
             break;
         case InstructionType::invokevirtual_m: 
             activationStack.push(current_activation);
             current_activation = new Activation(0,0, this->getMethod(curInstruction->what));
+            //std::cout<<"invokevirtual_m: "<<curInstruction->what<<std::endl;
             break;
         case InstructionType::ireturn: 
             current_activation = activationStack.top();
@@ -184,9 +182,9 @@ void Interpreter::handleArgumentOp(InstructionType instruction)
         break;
     case InstructionType::ilt:
         if(v2 < v1)
-            this->dataStack.push(1);
-        else    
-            this->dataStack.push(0);
+            this->dataStack.push(1);     
+        else
+            this->dataStack.push(0);     
         break;
     case InstructionType::igt:
         if(v2 > v1)
@@ -242,7 +240,7 @@ ByteCodeMethod *Interpreter::getMethod(std::string name)
     }
     else
     {
-        std::cout<<"found method: "<<ret->getData()<<std::endl;
+        //std::cout<<"found method: "<<ret->getData()<<std::endl;
     }
     return ret;
 }
