@@ -1,15 +1,16 @@
 #include "ByteCode.hpp"
-ByteCode::ByteCode()
+
+Bytecode::Bytecode()
     :type(InstructionType::nothing), what("")
 {
 }
 
-ByteCode::ByteCode(InstructionType type, std::string what)
+Bytecode::Bytecode(InstructionType type, std::string what)
     :type(type), what(what)
 {
 }
 
-std::string ByteCode::getString()
+std::string Bytecode::getString()
 {
     std::string ret = "";
     switch (this->type)

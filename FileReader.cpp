@@ -41,7 +41,7 @@ ByteCodeProgram *FileReader::ReadFile(std::string fileName)
             file>>varID;
 
             //std::cout<<"Var: type: "<<varType<<" ID: "<<varID<<std::endl;
-            curMeth.vars[j] = new Variable(varType, varID);
+            curMeth.vars[j] = new Variable(varID, varType);
         }
 
         int numInstructions;
@@ -93,7 +93,7 @@ void FileReader::printProgram(ByteCodeProgram *program)
         std::cout<<m.data<<"\n";
         for(auto v: m.vars)
         {
-            std::cout<<v->getID()<<std::endl;
+            std::cout<<v->id<<std::endl;
         }
         for(auto i: m.instructions)
         {

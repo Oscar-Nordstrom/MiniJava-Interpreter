@@ -3,14 +3,14 @@
 #include <unordered_map>
 #include <stack>
 
-#include "Variable.hpp"
+#include "Records.hpp"
 #include "ByteCode.hpp"
 
 class Activation
 {
 public:
     Activation(int ic, int ac, ByteCodeMethod* method);
-    ByteCode* getNext();
+    Bytecode* getNext();
     void gotoInstruction(std::string name);
 public:
     int instructionCounter;

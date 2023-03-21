@@ -3,13 +3,13 @@
 Activation::Activation(int ic, int ac, ByteCodeMethod *method)
     :instructionCounter(ic), argumentCounter(ac), method(method)
 {
-    for(auto v: method->vars)
+    for(auto& v: method->vars)
     {
-        this->local_vars.insert({v->getID(), 0});
+        this->local_vars.insert({v->id, 0});
     }
 }
 
-ByteCode *Activation::getNext()
+Bytecode *Activation::getNext()
 {
     if(this->instructionCounter >= this->method->instructions.size())
     {
@@ -67,7 +67,7 @@ void Interpreter::execute()
 {  
     ByteCodeMethod* m = this->mainMethod;
     Activation* current_activation = new Activation(0, 0, m);
-    ByteCode* curInstruction = new ByteCode();
+    Bytecode* curInstruction = new Bytecode();
     std::stack<Activation*> activationStack;
     int one, two;
     while(curInstruction->type != InstructionType::stop)
@@ -77,8 +77,6 @@ void Interpreter::execute()
         switch (curInstruction->type)
         {
         case InstructionType::iload: 
-            if(curInstruction->what == "this")
-                continue;
             //std::cout<<"iload: "<<curInstruction->what<<std::endl;
             this->dataStack.push(current_activation->local_vars.at(curInstruction->what));
             //std::cout<<"iload: "<<curInstruction->what<<": "<<this->dataStack.top()<<std::endl;
@@ -88,8 +86,6 @@ void Interpreter::execute()
             //std::cout<<"iconst: "<<curInstruction->what<<": "<<this->dataStack.top()<<std::endl;
             break;
         case InstructionType::istore: 
-            if(curInstruction->what == "this")
-                continue;
             //std::cout<<"istore: "<<curInstruction->what<<std::endl;
             one = this->dataStack.top();
             this->dataStack.pop();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Variable.hpp"
+#include "Records.hpp"
 
 #include <string>
 #include <vector>
@@ -30,11 +30,11 @@ enum class InstructionType
     nothing //Default constructor sets this
 };
 
-class ByteCode
+struct Bytecode
 {
 public:
-    ByteCode();
-    ByteCode(InstructionType type, std::string what = "");
+    Bytecode();
+    Bytecode(InstructionType type, std::string what = "");
     std::string getString();
     InstructionType type;
     std::string what;
@@ -46,12 +46,13 @@ class ByteCodeInstruction
 public:
     ByteCodeInstruction();
     std::string name;
-    std::vector<ByteCode> arguments;
+    std::vector<Bytecode> arguments;
     void setData(std::string data);
     std::string getData();
 private:
     std::string data;
 };
+
 class ByteCodeMethod
 {
 public:
@@ -63,6 +64,7 @@ public:
     std::string data;
 private:
 };
+
 class ByteCodeProgram
 {
 public:
@@ -74,6 +76,5 @@ public:
 private:
     std::string data;
 };
-
 
 
